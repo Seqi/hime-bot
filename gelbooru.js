@@ -10,10 +10,20 @@ const Gelbooru = {
 
     getRandomImage: (tags, callback) => {
         getImageCount(tags, (count) => {
+
+            if (count == 0) {
+                callback('No images found for tags ' + tags);
+            }
+
             const pageNumber = parseInt(((Math.random() * count) + 1), 10);
+            if (pageNumber === 0) {
+
+            }
+
             const url = `${apiRoot}&tags=${tags}&limit=1&json=1&pid=${pageNumber}`;
-            
+
             getData(url, (response) => {
+                console.log(response);
                 if (!response || response.length < 1) {
                     callback('no images found');
                 }
@@ -47,7 +57,7 @@ function getData(url, callback) {
         });
 
         res.on('end', () => {
-            if (isJson) {
+            if (isJson && data) {
                 callback(JSON.parse(data));
             } else {
                 callback(data);
