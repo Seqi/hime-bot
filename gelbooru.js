@@ -1,56 +1,51 @@
 const https = require('https');
 
 const apiRoot = 'https:\/\/gelbooru.com/index.php?page=dapi&s=post&q=index';
-function buildImageRetrieveUrl(tags, count, page, json = true) {
-    apiRoot += `&tags=${tags}`
+const Gelbooru = function (tags) {
 
-    if (count !== undefined && count !== null) {
-        apiRoot += `&count=${count}`;
-    }
+    // Public 
+    this.tags = [];
+    this.tagsToExclude = [];
 
-    if (page !== undefined && page !== null) {
-        apiRoot += `&pid=${page}`;
-    }
-
-    if (json) {
-        apiRoot += '&json=1';
-    }
-}
-
-function getData(url, callback) {
-    const isJson = url.indexOf('&json=1') > -1;
-    https.get(url, (res) => {
-        res.setEncoding('utf8');
-        let data = '';
-
-        res.on('data', (chunk) => {
-            data += chunk;
+    this.getTagString = () => {
+        let tagString = '';
+        this.tags.forEach(tag => {
+            if (tagString === '') {
+                tagString += tag;
+            } else {
+                tagString += '+' + tag;
+            }
         });
 
-        res.on('end', () => {
-            if (isJson && data) {
-                callback(JSON.parse(data));
+        this.tagsToExclude.forEach(tag => {
+            if (tagString === '') {
+                tagString += '-' + tag;
             } else {
-                callback(data);
+                tagString += '+-' + tag;
             }
-        })
-    });
-}
+        });
 
-const Gelbooru = {
-    getTopImage: (tags, callback) => {
-        getData(buildImageRetrieveUrl(tags, 1), callback);
-    },
+        return tagString;
+    };
 
-    getRandomImage: (tags, callback) => {
-        getImageCount(tags, (count) => {
+    this.getTopImage = (callback) => {
+        getData(buildImageRetrieveUrl(this.getTagString(), 1), (img) => {
+            if (img.length === 0) {
+                return callback('no image found');
+            }
+            callback(null, img[0]);
+        });
+    };
+
+    this.getRandomImage = (callback) => {
+        getImageCount((count) => {
 
             if (count == 0) {
-                return callback('No images found for tags ' + tags);
+                return callback('No images found for tags ' + this.getTagString());
             }
 
             const pageNumber = parseInt(((Math.random() * count) + 1), 10);
-            const url = buildImageRetrieveUrl(tags, 1, pageNumber);
+            const url = buildImageRetrieveUrl(this.getTagString(), 1, pageNumber);
 
             getData(url, (response) => {
                 if (!response || response.length < 1) {
@@ -63,13 +58,68 @@ const Gelbooru = {
                 callback(null, response[0]);
             })
         })
-    },
+    };
 
-    getImageCount: (tags, callback) => {
-        getData(buildImageRetrieveUrl(tags, 0, 1, false), (response) => {
+    this.getImageCount = (callback) => {
+        getData(buildImageRetrieveUrl(this.getTagString(), 0, 1, false), (response) => {
             callback(/(?:count=")([0-9]+)/.exec(response)[1]);
         })
+    };
+
+    // Private
+    getData = (url, callback) => {
+        const isJson = url.indexOf('&json=1') > -1;
+        https.get(url, (res) => {
+            res.setEncoding('utf8');
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                if (isJson && data) {
+                    callback(JSON.parse(data));
+                } else {
+                    callback(data);
+                }
+            })
+        });
     }
 }
 
-module.exports = Gelbooru;
+function buildImageRetrieveUrl (tags, count, page, json = true) {
+        let url = apiRoot + `&tags=${tags}`
+
+        if (count !== undefined && count !== null) {
+            url += `&limit=${count}`;
+        }
+
+        if (page !== undefined && page !== null) {
+            url += `&pid=${page}`;
+        }
+
+        if (json) {
+            url += '&json=1';
+        }
+
+        console.log(url);
+
+        return url;
+    }
+
+module.exports = function (tags, safeOnly) {
+    const obj = new Gelbooru(tags)
+
+    if (tags instanceof Array) {
+        tags.forEach(tag => obj.tags.push(tag));
+    } else {
+        obj.tags.push(tags);
+    }
+
+    if (safeOnly) {
+        obj.tags.push('rating:safe');
+    }
+
+    return obj;
+}
