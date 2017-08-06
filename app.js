@@ -38,7 +38,7 @@ client.on('ready', () => {
 
 
     setInterval(function () {
-        let tag = TAG;
+        let tag = SFW_TAG;
         if (TAGS_TO_IGNORE.length > 0) {
             tag += '+-' + TAGS_TO_IGNORE.join('+-');
         }
@@ -52,7 +52,7 @@ client.on('ready', () => {
     }, IMAGE_POST_INTERVAL_MILLIS);
 
     setInterval(() => {
-        let tag = TAG;
+        let tag = NSFW_TAG;
         if (TAGS_TO_IGNORE.length > 0) {
             tag += '+-' + TAGS_TO_IGNORE.join('+-');
         }
@@ -75,13 +75,13 @@ client.on('message', msg => {
 
         if (command === 'ignoretag') {
             TAGS_TO_IGNORE.push(parameter);
-            msg.reply('Ignoring ' + parameter);
+            msg.channel.send('Ignoring ' + parameter);
 
             let tag = TAG;
             if (TAGS_TO_IGNORE.length > 0) {
                 tag += '+-' + TAGS_TO_IGNORE.join('+-');
             }
-            msg.reply('new tag string: ' + tag);
+            msg.channel.send('new tag string: ' + tag);
         }
     }
 
