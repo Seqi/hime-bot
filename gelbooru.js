@@ -2,8 +2,6 @@ const https = require('https');
 
 const apiRoot = 'https:\/\/gelbooru.com/index.php?page=dapi&s=post&q=index';
 const Gelbooru = function (tags) {
-
-    // Public 
     this.tags = [];
     this.tagsToExclude = [];
 
@@ -65,48 +63,44 @@ const Gelbooru = function (tags) {
             callback(/(?:count=")([0-9]+)/.exec(response)[1]);
         })
     };
-
-    // Private
-    getData = (url, callback) => {
-        const isJson = url.indexOf('&json=1') > -1;
-        https.get(url, (res) => {
-            res.setEncoding('utf8');
-            let data = '';
-
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            res.on('end', () => {
-                if (isJson && data) {
-                    callback(JSON.parse(data));
-                } else {
-                    callback(data);
-                }
-            })
-        });
-    }
 }
 
-function buildImageRetrieveUrl (tags, count, page, json = true) {
-        let url = apiRoot + `&tags=${tags}`
+function buildImageRetrieveUrl(tags, count, page, json = true) {
+    let url = apiRoot + `&tags=${tags}`
 
-        if (count !== undefined && count !== null) {
-            url += `&limit=${count}`;
-        }
-
-        if (page !== undefined && page !== null) {
-            url += `&pid=${page}`;
-        }
-
-        if (json) {
-            url += '&json=1';
-        }
-
-        console.log(url);
-
-        return url;
+    if (count !== undefined && count !== null) {
+        url += `&limit=${count}`;
     }
+
+    if (page !== undefined && page !== null) {
+        url += `&pid=${page}`;
+    }
+
+    if (json) {
+        url += '&json=1';
+    }
+    return url;
+}
+
+function getData(url, callback) {
+    const isJson = url.indexOf('&json=1') > -1;
+    https.get(url, (res) => {
+        res.setEncoding('utf8');
+        let data = '';
+
+        res.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        res.on('end', () => {
+            if (isJson && data) {
+                callback(JSON.parse(data));
+            } else {
+                callback(data);
+            }
+        })
+    });
+}
 
 module.exports = function (tags, safeOnly) {
     const obj = new Gelbooru(tags)
