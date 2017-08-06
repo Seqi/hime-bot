@@ -1,49 +1,20 @@
 const https = require('https');
 
 const apiRoot = 'https:\/\/gelbooru.com/index.php?page=dapi&s=post&q=index';
-const Gelbooru = {
+function buildImageRetrieveUrl(tags, count, page, json = true) {
+    apiRoot += `&tags=${tags}`
 
-    getTopImage: (tags, callback) => {
-        const url = `${apiRoot}&tags=${tags}&limit=1&json=1`;
-        getData(url, callback);
-    },
-
-    getRandomImage: (tags, callback) => {
-        getImageCount(tags, (count) => {
-
-            if (count == 0) {
-                callback('No images found for tags ' + tags);
-            }
-
-            const pageNumber = parseInt(((Math.random() * count) + 1), 10);
-            if (pageNumber === 0) {
-
-            }
-
-            const url = `${apiRoot}&tags=${tags}&limit=1&json=1&pid=${pageNumber}`;
-
-            getData(url, (response) => {
-                console.log(response);
-                if (!response || response.length < 1) {
-                    callback('no images found');
-                }
-
-                // Turn the file_url into a http link
-                if (response[0].file_url) {
-                    response[0].file_url = 'https:' + response[0].file_url;
-                }
-                callback(null, response[0]);
-            })
-        })
+    if (count !== undefined && count !== null) {
+        apiRoot += `&count=${count}`;
     }
-}
 
-function getImageCount(tags, callback) {
-    var url = `${apiRoot}&tags=${tags}&limit=0`;
+    if (page !== undefined && page !== null) {
+        apiRoot += `&pid=${page}`;
+    }
 
-    getData(url, (response) => {
-        callback(/(?:count=")([0-9]+)/.exec(response)[1]);
-    })
+    if (json) {
+        apiRoot += '&json=1';
+    }
 }
 
 function getData(url, callback) {
@@ -64,6 +35,41 @@ function getData(url, callback) {
             }
         })
     });
+}
+
+const Gelbooru = {
+    getTopImage: (tags, callback) => {
+        getData(buildImageRetrieveUrl(tags, 1), callback);
+    },
+
+    getRandomImage: (tags, callback) => {
+        getImageCount(tags, (count) => {
+
+            if (count == 0) {
+                return callback('No images found for tags ' + tags);
+            }
+
+            const pageNumber = parseInt(((Math.random() * count) + 1), 10);
+            const url = buildImageRetrieveUrl(tags, 1, pageNumber);
+
+            getData(url, (response) => {
+                if (!response || response.length < 1) {
+                    return callback('no images found');
+                }
+
+                if (response[0].file_url) {
+                    response[0].file_url = 'https:' + response[0].file_url;
+                }
+                callback(null, response[0]);
+            })
+        })
+    },
+
+    getImageCount: (tags, callback) => {
+        getData(buildImageRetrieveUrl(tags, 0, 1, false), (response) => {
+            callback(/(?:count=")([0-9]+)/.exec(response)[1]);
+        })
+    }
 }
 
 module.exports = Gelbooru;
