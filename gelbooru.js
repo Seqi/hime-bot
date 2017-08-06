@@ -36,7 +36,7 @@ const Gelbooru = function (tags) {
     };
 
     this.getRandomImage = (callback) => {
-        getImageCount((count) => {
+        this.getImageCount((count) => {
 
             if (count == 0) {
                 return callback('No images found for tags ' + this.getTagString());
@@ -79,6 +79,7 @@ function buildImageRetrieveUrl(tags, count, page, json = true) {
     if (json) {
         url += '&json=1';
     }
+    console.log(url);
     return url;
 }
 
@@ -113,6 +114,8 @@ module.exports = function (tags, safeOnly) {
 
     if (safeOnly) {
         obj.tags.push('rating:safe');
+    } else {
+        obj.tags.push('rating:explicit');
     }
 
     return obj;
