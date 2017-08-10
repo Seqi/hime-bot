@@ -26,7 +26,8 @@ const COMMANDS = [
     '!removetag',
     '!ignoretag',
     '!unignoretag',
-    '!viewtags'
+    '!viewtags',
+    '!postimage'
 ]
 
 const IMAGE_POST_INTERVAL = 1000 * 60 * 30;
@@ -34,7 +35,7 @@ const IMAGE_POST_INTERVAL = 1000 * 60 * 30;
 client.on('ready', () => {
     console.log('Bot connected as %s - %s', client.user.username, client.user.id);
 
-    CHANNELS.forEach(c => {        
+    CHANNELS.forEach(c => {
         const channel = client.channels.find(x => x.id == c.id);
         c.gelbooru = new Gelbooru('hime_cut', !c.nsfw);
         console.log(`Connected bot to ` + channel.name);
@@ -49,7 +50,7 @@ client.on('ready', () => {
 
                 console.log(`Posting ${url} to ${channel.name}`);
                 client.channels.find(chnl => chnl.id === channel.id).send(url);
-            });        
+            });
         }, IMAGE_POST_INTERVAL);
     });
 });
@@ -64,13 +65,10 @@ client.on('message', msg => {
 
     // Ignore commands that aren't listed and ensure we have an argument
     if (COMMANDS.indexOf(command) === -1) { return; }
-    if (msgParts.length < 2) {
-        msg.reply('Missing argument.');
-    }
 
     // FOR MIZU
     if (command === COMMANDS[0]) {
-        const compliments = ['thanks', 'thanks!', 'thank you', 'thank you!', 'arigatou' ];
+        const compliments = ['thanks', 'thanks!', 'thank you', 'thank you!', 'arigatou'];
         const message = msgParts.slice(1, msgParts.length).join(' ');
 
         if (compliments.indexOf(message.toLowerCase()) > -1) {
@@ -83,12 +81,16 @@ client.on('message', msg => {
     if (!server) { return; }
 
     // Only let me do tag stuff for now
-    if (msg.author.id !==  '177120846861697024') {
+    if (msg.author.id !== '177120846861697024') {
         return;
     }
 
     // Add Tag
     if (command === COMMANDS[1]) {
+        if (msgParts.length < 2) {
+            msg.reply('Missing argument.');
+        }
+
         const tag = msgParts[1];
         server.gelbooru.tags.push(tag);
         msg.channel.send('Adding tag ' + tag);
@@ -96,7 +98,10 @@ client.on('message', msg => {
     }
     // Remove tag
     else if (command === COMMANDS[2]) {
-
+        if (msgParts.length < 2) {
+            msg.reply('Missing argument.');
+        }
+        
         const tag = msgParts[1];
         const tagIndex = server.gelbooru.tags.indexOf(tag);
 
@@ -107,6 +112,15 @@ client.on('message', msg => {
         server.gelbooru.tags.splice(tagIndex, 1);
         msg.channel.send('Removed ' + tag);
         msg.channel.send('Now searching: ' + server.gelbooru.tags.join(', '));
+    }
+    // View tags
+    else if (command == COMMANDS[5]) {
+        msg.channel.send('Searching tags: ' + server.gelbooru.tags.join(', '));
+    }
+    else if (command == COMMANDS[6]) {
+        server.gelbooru.getRandomImage((err, img) => {
+            msg.channel.send(img.file_url);
+        });
     }
 })
 
