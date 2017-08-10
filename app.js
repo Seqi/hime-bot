@@ -101,7 +101,7 @@ client.on('message', msg => {
         if (msgParts.length < 2) {
             msg.reply('Missing argument.');
         }
-        
+
         const tag = msgParts[1];
         const tagIndex = server.gelbooru.tags.indexOf(tag);
 
@@ -112,6 +112,16 @@ client.on('message', msg => {
         server.gelbooru.tags.splice(tagIndex, 1);
         msg.channel.send('Removed ' + tag);
         msg.channel.send('Now searching: ' + server.gelbooru.tags.join(', '));
+    }
+    else if (command === COMMANDS[3]) {
+        if (msgParts.length < 2) {
+            msg.reply('Missing argument.');
+        }
+
+        const tag = msgParts[1];
+        server.gelbooru.tagsToExclude.push(tag);
+        msg.channel.send('Ignoring tag ' + tag);
+        msg.channel.send('Now ignoring: ' + server.gelbooru.tagsToExclude.join(', '));
     }
     // View tags
     else if (command == COMMANDS[5]) {
