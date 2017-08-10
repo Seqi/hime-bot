@@ -129,6 +129,10 @@ client.on('message', msg => {
     }
     else if (command == COMMANDS[6]) {
         server.gelbooru.getRandomImage((err, img) => {
+            if (err) {
+                return msg.channel.send(err);
+            }
+            
             msg.channel.send(img.file_url);
         });
     }
