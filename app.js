@@ -30,7 +30,7 @@ const COMMANDS = [
     '!postimage'
 ]
 
-const IMAGE_POST_INTERVAL = 1000 * 60 * 30;
+const IMAGE_POST_INTERVAL = 1000 * 60 * 2;
 
 client.on('ready', () => {
     console.log('Bot connected as %s - %s', client.user.username, client.user.id);
@@ -56,7 +56,6 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-    // For now, only let me give it commands
     // Ignore messages from ourselves
     if (msg.author.id === client.user.id) { return; }
 
@@ -66,7 +65,7 @@ client.on('message', msg => {
     // Ignore commands that aren't listed and ensure we have an argument
     if (COMMANDS.indexOf(command) === -1) { return; }
 
-    // FOR MIZU
+    // COMMANDS FOR EVERYONE
     if (command === COMMANDS[0]) {
         const compliments = ['thanks', 'thanks!', 'thank you', 'thank you!', 'arigatou'];
         const message = msgParts.slice(1, msgParts.length).join(' ');
@@ -76,11 +75,28 @@ client.on('message', msg => {
         }
     }
 
+    else if (command == COMMANDS[6]) {
+        if (!server) {
+            server = {
+                gelbooru: new Gelbooru('hime_cut')
+            };
+        }
+        msgParts.slice(1, msgParts.length).forEach(tag => server.gelbooru.tags.push(tag));
+
+        server.gelbooru.getRandomImage((err, img) => {
+            if (err) {
+                return msg.channel.send(err);
+            }
+
+            msg.channel.send(img.file_url);
+        });
+    }
+
     // For tag manipulation, ensure the message comes from a registered channel
     var server = CHANNELS.find(x => x.id === msg.channel.id);
     if (!server) { return; }
 
-    // Only let me do tag stuff for now
+    // COMMANDS FOR AUTHORIZED USERS
     if (msg.author.id !== '177120846861697024') {
         return;
     }
@@ -113,6 +129,7 @@ client.on('message', msg => {
         msg.channel.send('Removed ' + tag);
         msg.channel.send('Now searching: ' + server.gelbooru.tags.join(', '));
     }
+    // Ignore tag
     else if (command === COMMANDS[3]) {
         if (msgParts.length < 2) {
             msg.reply('Missing argument.');
@@ -126,15 +143,6 @@ client.on('message', msg => {
     // View tags
     else if (command == COMMANDS[5]) {
         msg.channel.send('Searching tags: ' + server.gelbooru.tags.join(', '));
-    }
-    else if (command == COMMANDS[6]) {
-        server.gelbooru.getRandomImage((err, img) => {
-            if (err) {
-                return msg.channel.send(err);
-            }
-            
-            msg.channel.send(img.file_url);
-        });
     }
 })
 

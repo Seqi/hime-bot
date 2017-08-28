@@ -79,7 +79,6 @@ function buildImageRetrieveUrl(tags, count, page, json = true) {
     if (json) {
         url += '&json=1';
     }
-    console.log(url);
     return url;
 }
 
@@ -112,9 +111,9 @@ module.exports = function (tags, safeOnly) {
         obj.tags.push(tags);
     }
 
-    if (safeOnly) {
+    if (safeOnly === true) {
         obj.tags.push('rating:safe');
-    } else {
+    } else if (safeOnly === false) {
         obj.tags.push('rating:explicit');
     }
 
