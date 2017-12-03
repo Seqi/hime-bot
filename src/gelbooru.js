@@ -50,7 +50,7 @@ const Gelbooru = function (tags) {
                     return callback('no images found');
                 }
 
-                if (response[0].file_url) {
+                if (response[0].file_url.indexOf('https:') != 0) {
                     response[0].file_url = 'https:' + response[0].file_url;
                 }
                 callback(null, response[0]);

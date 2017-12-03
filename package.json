@@ -2,8 +2,9 @@
   "name": "hime-bot",
   "version": "1.0.0",
   "description": "best girl dumper",
-  "main": "app.js",
+  "main": "bot.js",
   "scripts": {
+    "start": "node src/bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
