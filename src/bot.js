@@ -16,7 +16,7 @@ client.on('ready', () => {
     }
 
     channels.forEach(c => {
-        channel.addChannel(c.id, c.nsfw)
+        channel.addChannel(c.id, c.interval, c.nsfw)
     })
 });
 
