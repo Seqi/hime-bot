@@ -5,6 +5,16 @@ const Gelbooru = function (tags) {
     this.tags = [];
     this.tagsToExclude = [];
 
+    this.getPrintableTagString = () => {
+        let string = `Searching tags ${this.tags.join(', ')}.`
+
+        if (this.tagsToExclude.length > 0) {
+            string += `\nExcluding tags ${this.tagsToExclude.join(', ')}`
+        }
+
+        return string
+    }
+
     this.getTagString = () => {
         let tagString = '';
         this.tags.forEach(tag => {

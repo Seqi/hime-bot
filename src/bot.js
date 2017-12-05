@@ -7,10 +7,6 @@ const channel = require('./channel')(client)
 
 const BotCommand = '!himebot'
 
-if (!config.discord.token) {
-    throw Error('No discord token was found')
-}
-
 client.on('ready', () => {
     console.log('Bot connected as %s - %s', client.user.username, client.user.id);
 
@@ -35,5 +31,9 @@ client.on('message', msg => {
 
     commands.process(msg)
 })
+
+if (!config.discord.token) {
+    throw Error('No discord token was found')
+}
 
 client.login(config.discord.token);
