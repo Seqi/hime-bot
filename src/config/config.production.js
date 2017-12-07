@@ -13,6 +13,7 @@ module.exports = {
             [
                 {
                     "id": "",
+                    "interval": 60,
                     "nsfw": false
                 }
             ]
