@@ -7,6 +7,8 @@ handle = (msg) => {
     }
 
     let src = channel(msg.client).getChannel(msg.channel.id)
+    if (!src) return
+    
     msg.channel.send(src.booru.getPrintableTagString())
 }
 

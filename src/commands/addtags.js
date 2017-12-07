@@ -7,7 +7,8 @@ handle = (msg) => {
     let words = msg.content.split(' ')
     words.splice(0, 2)
 
-    let src = channel(msg.client).getChannel(msg.channel.id)
+    let src = require('../channel')(msg.client).getChannel(msg.channel.id)
+    if (!src) return
 
     let errors = []
     words.forEach(word => {
@@ -27,7 +28,7 @@ handle = (msg) => {
 }
 
 hasPermission = (user) => {
-    return true
+    return user.id === '177120846861697024'
 }
 
 module.exports.tag = 'addtags'

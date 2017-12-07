@@ -20,6 +20,7 @@ handle = (msg) => {
 
 
     let channel = require('../channel')(msg.client).getChannel(msg.channel.id)
+    if (!channel) return
 
     // Set the new interval in the channel config
     channel.interval = interval
@@ -34,7 +35,7 @@ handle = (msg) => {
 }
 
 hasPermission = (user) => {
-    return true
+    return user.id === '177120846861697024'
 }
 
 module.exports.tag = 'changeinterval'

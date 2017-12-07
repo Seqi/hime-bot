@@ -6,9 +6,6 @@ let event = (channel) => {
 
         channel.channel.send(imgUrl.file_url)
     })
-
-    clearInterval(channel.event)
-    channel.event = setInterval(() => event(channel), 1000 * 60 * channel.interval)
 }
 
 let register = (channel) => {
