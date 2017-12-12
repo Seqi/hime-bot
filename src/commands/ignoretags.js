@@ -7,7 +7,7 @@ handle = (msg) => {
     let words = msg.content.split(' ')
     words.splice(0, 2)
 
-    let src = channel(msg.client).getChannel(msg.channel.id)
+    let src = require('../channel')(msg.client).getChannel(msg.channel.id)
     if (!src) return
 
     let errors = []

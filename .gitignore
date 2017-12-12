@@ -1,3 +1,4 @@
 src/config/config.development.js
 node_modules
 .vscode
+docker-compose.yml

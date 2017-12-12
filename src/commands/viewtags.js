@@ -5,8 +5,8 @@ handle = (msg) => {
         console.log(`${msg.author.username} attempted to use ${this.tag} `)
         return
     }
-
-    let src = channel(msg.client).getChannel(msg.channel.id)
+    
+    let src = require('../channel')(msg.client).getChannel(msg.channel.id)
     if (!src) return
     
     msg.channel.send(src.booru.getPrintableTagString())
