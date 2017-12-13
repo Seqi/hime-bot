@@ -29,10 +29,6 @@ handle = (msg) => {
     msg.channel.send(`Now retrieving an image for you every ${interval} minutes.`)
 }
 
-hasPermission = (user) => {
-    return user.id === '177120846861697024'
-}
-
 module.exports.aliases = ['changeinterval', 'updateinterval']
 module.exports.handle = handle
 module.exports.requiresAdmin = true

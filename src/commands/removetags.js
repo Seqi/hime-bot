@@ -27,10 +27,6 @@ handle = (msg) => {
     msg.channel.send(src.booru.getPrintableTagString())
 }
 
-hasPermission = (user) => {
-    return user.id === '177120846861697024'
-}
-
 module.exports.aliases = ['removetag', 'removetags']
 module.exports.handle = handle
 module.exports.requiresAdmin = true
