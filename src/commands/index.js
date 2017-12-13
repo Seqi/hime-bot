@@ -1,4 +1,6 @@
 const fs = require('fs')
+const config = require('../config')
+const permissions = require('../permissions')
 
 const commands = fs.readdirSync(__dirname)
     .filter(dir => dir != 'index.js')
@@ -7,10 +9,22 @@ const commands = fs.readdirSync(__dirname)
 module.exports.process = (msg) => {
     let parts = msg.content.split(' ')
 
-    let command = commands.find(cmd => cmd.tag === parts[1])
+    let command = commands.find(cmd => cmd.aliases.indexOf(parts[1] > -1))
 
+    // Check command exists
     if (!command) {
-        return msg.reply('Command does not exist. Use the command \'help\' to view a list of possible commands.')
+        return msg.reply('I do not understand your request. Please use my \'help\' command to view my functions.')
+    }
+
+    // Check user has permission to execute
+    if (command.requiresAdmin) {
+        let isAdmin = permissions.isBotAdminOfGuild(msg.author, msg.channel.guild)
+
+        if (!isAdmin) {
+            console.log(`${msg.author.username} attempted to use ${this.tag} `)
+            msg.reply('I\'m sorry, my master has prevented me from performing that function for you.')
+            return
+        }
     }
 
     command.handle(msg)

@@ -1,11 +1,6 @@
 const event = require('../bot-event')
 
 handle = (msg) => {
-    if (!this.hasPermission(msg.author)) {
-        console.log(`${msg.author.username} attempted to use ${this.tag} `)
-        return
-    }
-
     let words = msg.content.split(' ')
 
     if (words.length != 3) {
@@ -38,6 +33,6 @@ hasPermission = (user) => {
     return user.id === '177120846861697024'
 }
 
-module.exports.tag = 'changeinterval'
+module.exports.aliases = ['changeinterval', 'updateinterval']
 module.exports.handle = handle
-module.exports.hasPermission = hasPermission
+module.exports.requiresAdmin = true

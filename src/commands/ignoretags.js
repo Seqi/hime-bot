@@ -1,9 +1,4 @@
 handle = (msg) => {
-    if (!this.hasPermission(msg.author)) {
-        console.log(`${msg.author.username} attempted to use ${this.tag} `)
-        return
-    }
-
     let words = msg.content.split(' ')
     words.splice(0, 2)
 
@@ -31,6 +26,6 @@ hasPermission = (user) => {
     return user.id === '177120846861697024'
 }
 
-module.exports.tag = 'ignoretags'
+module.exports.aliases = ['ignoretag', 'ignoretags']
 module.exports.handle = handle
-module.exports.hasPermission = hasPermission
+module.exports.requiresAdmin = true

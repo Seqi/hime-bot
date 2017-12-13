@@ -1,9 +1,4 @@
 handle = (msg) => {
-    if (!this.hasPermission(msg.author)) {
-        console.log(`${msg.author.username} attempted to use ${this.tag} `)
-        return
-    }
-
     let channel = require('../channel')(msg.client).getChannel(msg.channel.id)
     if (!channel) return
 
@@ -20,6 +15,6 @@ hasPermission = (user) => {
     return true
 }
 
-module.exports.tag = 'postimage'
+module.exports.aliases = ['postimage']
 module.exports.handle = handle
-module.exports.hasPermission = hasPermission
+module.exports.requiresAdmin = false

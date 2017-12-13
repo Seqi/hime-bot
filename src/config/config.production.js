@@ -6,6 +6,7 @@ module.exports = {
         "token": process.env.DANBOORU_APITOKEN
     },
     "bot": {
+        "adminRoles": ["your-custom-roles"],
         "images": {
             "tags": ["hime_cut"]
         },

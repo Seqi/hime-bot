@@ -27,6 +27,6 @@ hasPermission = (user) => {
     return true
 }
 
-module.exports.tag = 'help'
+module.exports.aliases = ['help']
 module.exports.handle = handle
 module.exports.hasPermission = hasPermission

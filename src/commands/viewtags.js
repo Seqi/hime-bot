@@ -1,11 +1,6 @@
 let channel = require('../channel')
 
-handle = (msg) => {
-    if (!this.hasPermission(msg.author)) {
-        console.log(`${msg.author.username} attempted to use ${this.tag} `)
-        return
-    }
-    
+handle = (msg) => {    
     let src = require('../channel')(msg.client).getChannel(msg.channel.id)
     if (!src) return
     
@@ -16,6 +11,6 @@ hasPermission = (user) => {
     return true
 }
 
-module.exports.tag = 'viewtags'
+module.exports.aliases = ['viewtags', 'showtags']
 module.exports.handle = handle
-module.exports.hasPermission = hasPermission
+module.exports.rquiresAdmin = false
