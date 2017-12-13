@@ -16,7 +16,7 @@ handle = (msg) => {
     })
 
     if (errors.length > 0) {
-        msg.channel.send(`Cannot ignore tag already being ignored or tracked(${errors.join(', ')})`)
+        msg.channel.send(`I am already ignoring or searching for these tags (${errors.join(', ')})`)
     }
 
     msg.channel.send(src.booru.getPrintableTagString())

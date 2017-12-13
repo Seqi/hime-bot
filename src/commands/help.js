@@ -1,9 +1,4 @@
 handle = (msg) => {
-    if (!this.hasPermission(msg.author)) {
-        console.log(`${msg.author.username} attempted to use ${this.tag} `)
-        return
-    }
-
     let content = `I am capable of the following commands:
     
 postimage: I will fetch an image for you based on the current search tags
@@ -29,4 +24,4 @@ hasPermission = (user) => {
 
 module.exports.aliases = ['help']
 module.exports.handle = handle
-module.exports.hasPermission = hasPermission
+module.exports.requiresAdmin = false

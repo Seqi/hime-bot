@@ -13,4 +13,4 @@ hasPermission = (user) => {
 
 module.exports.aliases = ['viewtags', 'showtags']
 module.exports.handle = handle
-module.exports.rquiresAdmin = false
+module.exports.requiresAdmin = false

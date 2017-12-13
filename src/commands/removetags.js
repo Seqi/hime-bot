@@ -21,7 +21,7 @@ handle = (msg) => {
     })
 
     if (errors.length > 0) {
-        msg.channel.send(`Cannot remove tag not being tracked (${errors.join(', ')})`)
+        msg.channel.send(`I cannot remove these tag that I am not currently searching: (${errors.join(', ')})`)
     }
 
     msg.channel.send(src.booru.getPrintableTagString())

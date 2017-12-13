@@ -9,7 +9,7 @@ const commands = fs.readdirSync(__dirname)
 module.exports.process = (msg) => {
     let parts = msg.content.split(' ')
 
-    let command = commands.find(cmd => cmd.aliases.indexOf(parts[1] > -1))
+    let command = commands.find(cmd => cmd.aliases.indexOf(parts[1]) > -1)
 
     // Check command exists
     if (!command) {
