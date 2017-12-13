@@ -21,12 +21,12 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-    if (!msg.content.startsWith(BotCommand)) {
+    if (!msg.content.startsWith(BotCommand) && !msg.mentions.users.find(user => user.id === client.user.id)) {
         return
     }
 
     if (msg.content.split(' ').length < 2) {
-        msg.reply(`Type '${BotCommand} help' to view a list of commands`)
+        return msg.reply(`Type '${BotCommand} help' to view a list of commands`)
     }
 
     commands.process(msg)
