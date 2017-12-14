@@ -63,11 +63,7 @@ handle = (msg) => {
     ]
 
     // Cut off the mention
-    let words = msg.content.split(' ').slice(1).join(' ').trim()
-
-    greetMap.forEach(greet => {
-        console.log(greet)
-    })
+    let words = msg.content.split(' ').slice(1).join(' ').trim().toLowerCase()
 
     var greet = greetMap.find(greet => {
         for (let i = 0; i < greet.greetings.length; i++) {

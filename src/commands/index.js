@@ -5,7 +5,7 @@ const permissions = require('../permissions')
 const commands = fs.readdirSync(__dirname).filter(dir => dir != 'index.js').map(dir => require(`./${dir}`))
 
 module.exports.process = (msg) => {
-    let parts = msg.content.split(' ')
+    let parts = msg.content.toLowerCase().split(' ')
 
     // Move the mention to the front if there was one
     if (wasBotMentioned(msg)) {
@@ -13,6 +13,7 @@ module.exports.process = (msg) => {
 
         if (mentionIdx > 0) {
             parts.unshift(parts.splice(mentionIdx, 1))
+            msg.content = parts.join(' ')
         }
     }
 
