@@ -9,7 +9,8 @@ module.exports.process = (msg) => {
 
     // Move the mention to the front if there was one
     if (wasBotMentioned(msg)) {
-        let mentionIdx = parts.indexOf(`<@${msg.client.user.id}>`)
+        // Strip out any exclamation marks as a user with a nickname has a ! prefix
+        let mentionIdx = parts.map(p => p.replace('!', '')).indexOf(`<@${msg.client.user.id}>`)
 
         if (mentionIdx > 0) {
             parts.unshift(parts.splice(mentionIdx, 1))
