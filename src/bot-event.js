@@ -3,7 +3,6 @@ const booru = require('./danbooru')
 let event = (channel) => {
     booru.downloadRandomImage(channel.tags.getTags())
         .then(img => {
-            console.log(img)
             channel.channel.send('', { file: img })
         })
         .catch(err => {
@@ -13,7 +12,7 @@ let event = (channel) => {
 }
 
 let register = (channel) => {
-    channel.event = setInterval(() => event(channel), 1000 * 30 )//* 60 * channel.interval)
+    channel.event = setInterval(() => event(channel), 1000 * 60 * channel.interval)
 }
 
 module.exports.register = register

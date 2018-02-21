@@ -14,7 +14,6 @@ function booru (){
                 if (!posts || posts.length < 1) {
                     return Promise.reject('No images found.')
                 }
-                console.log(posts[0].file)
                 
                 return posts[0].file.download()
             })
