@@ -1,6 +1,6 @@
 const event = require('./bot-event')
-const gelbooru = require('./gelbooru')
 const config = require('./config').bot
+const TagStore = require('./tags')
 
 let channels = []
 
@@ -15,7 +15,7 @@ let c = (discord) => {
         let channel = {
             id,
             interval,
-            booru: new gelbooru(config.images.tags.concat(explicitness)),
+            tags: new TagStore(explicitness, ...config.images.tags),
             channel: discord.channels.find(server => server.id === id)
         }
 

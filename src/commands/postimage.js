@@ -1,18 +1,15 @@
+const booru = require('../danbooru')
+
 handle = (msg) => {
     let channel = require('../channel')(msg.client).getChannel(msg.channel.id)
     if (!channel) return
 
-    channel.booru.getRandomImage((err, imgUrl) => {
-        if (err) {
+    booru.downloadRandomImage(channel.tags.getTags())
+        .then(img =>  msg.channel.send('', { file: img }))
+        .catch(err => {
+            console.log(`Error posting image to ${msg.channel.name}: ${err}`)
             msg.channel.send('Sorry, I was unable to find an image..')
-        }
-        
-        msg.channel.send(imgUrl.file_url)
-    })
-}
-
-hasPermission = (user) => {
-    return true
+        })
 }
 
 module.exports.aliases = ['postimage']

@@ -4,7 +4,7 @@ handle = (msg) => {
     let src = require('../channel')(msg.client).getChannel(msg.channel.id)
     if (!src) return
     
-    msg.channel.send(src.booru.getPrintableTagString())
+    msg.channel.send(src.tags.getTagString())
 }
 
 hasPermission = (user) => {

@@ -2,16 +2,16 @@ handle = (msg) => {
     let words = msg.content.split(' ')
     words.splice(0, 2)
 
-    let src = require('../channel')(msg.client).getChannel(msg.channel.id)
-    if (!src) return
+    let channel = require('../channel')(msg.client).getChannel(msg.channel.id)
+    if (!channel) return
 
     let errors = []
     words.forEach(word => {
-        if (src.booru.tagsToExclude.indexOf(word) > -1 ||
-            src.booru.tags.indexOf(word) > -1) {
+        if (channel.tags.excludeTags.indexOf(word) > -1 ||
+            channel.tags.searchTags.indexOf(word) > -1) {
             errors.push(word)
         } else {
-            src.booru.tags.push(word)
+            channel.tags.searchTags.push(word)
         }
     })
 
@@ -19,7 +19,7 @@ handle = (msg) => {
         msg.channel.send(`I am already ignoring or searching for these tags: (${errors.join(', ')})`)
     }
 
-    msg.channel.send(src.booru.getPrintableTagString())
+    msg.channel.send(channel.tags.getTagString())
 }
 
 module.exports.aliases = ['addtag', 'addtags'] 

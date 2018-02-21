@@ -2,16 +2,16 @@ handle = (msg) => {
     let words = msg.content.split(' ')
     words.splice(0, 2)
 
-    let src = require('../channel')(msg.client).getChannel(msg.channel.id)
-    if (!src) return
+    let channel = require('../channel')(msg.client).getChannel(msg.channel.id)
+    if (!channel) return
 
     let errors = []
     words.forEach(word => {
-        let index = src.booru.tagsToExclude.indexOf(word)
+        let index = channel.tags.excludeTags.indexOf(word)
         if (index < 0) {
             errors.push(word)
         } else {
-            src.booru.tagsToExclude.splice(index, 1)
+            channel.tags.excludeTags.splice(index, 1)
         }
     })
 
@@ -19,7 +19,7 @@ handle = (msg) => {
         msg.channel.send(`I cannot remove these tag that I am not currently ignoring:  (${errors.join(', ')})`)
     }
 
-    msg.channel.send(src.booru.getPrintableTagString())
+    msg.channel.send(channel.tags.getTagString())
 }
 
 module.exports.aliases = ['unignoretags']

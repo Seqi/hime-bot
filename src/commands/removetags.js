@@ -1,22 +1,17 @@
 handle = (msg) => {
-    if (!this.hasPermission(msg.author)) {
-        console.log(`${msg.author.username} attempted to use ${this.tag} `)
-        return
-    }
-
     let words = msg.content.split(' ')
     words.splice(0, 2)
 
-    let src = require('../channel')(msg.client).getChannel(msg.channel.id)
-    if (!src) return
+    let channel = require('../channel')(msg.client).getChannel(msg.channel.id)
+    if (!channel) return
 
     let errors = []
     words.forEach(word => {
-        let index = src.booru.tags.indexOf(word)
+        let index = channel.tags.searchTags.indexOf(word)
         if (index < 0) {
             errors.push(word)
         } else {
-            src.booru.tags.splice(index, 1)
+            channel.tags.searchTags.splice(index, 1)
         }
     })
 
@@ -24,7 +19,7 @@ handle = (msg) => {
         msg.channel.send(`I cannot remove these tag that I am not currently searching: (${errors.join(', ')})`)
     }
 
-    msg.channel.send(src.booru.getPrintableTagString())
+    msg.channel.send(channel.tags.getTagString())
 }
 
 module.exports.aliases = ['removetag', 'removetags']

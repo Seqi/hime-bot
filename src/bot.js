@@ -18,6 +18,8 @@ client.on('ready', () => {
     channels.forEach(c => {
         channel.addChannel(c.id, c.interval, c.nsfw)
     })
+
+    
 });
 
 client.on('message', msg => {
