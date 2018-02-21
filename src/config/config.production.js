@@ -3,6 +3,7 @@ module.exports = {
         "token": process.env.DISCORD_APITOKEN
     },
     "danbooru": {
+        "user": process.env.DANBOORU_USER,
         "token": process.env.DANBOORU_APITOKEN
     },
     "bot": {
